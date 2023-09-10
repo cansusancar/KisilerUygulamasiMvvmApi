@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
+import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,12 +24,12 @@ import com.example.kisileruygulamasimvvm.ui.adapter.KisilerAdapter
 class AnasayfaFragment : Fragment(),SearchView.OnQueryTextListener {
     private lateinit var tasarim: FragmentAnasayfaBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        tasarim = FragmentAnasayfaBinding.inflate(inflater,container,false)
+        tasarim = DataBindingUtil.inflate(inflater,R.layout.fragment_anasayfa,container,false)
+        tasarim.anasayfaFragment = this
 
-        tasarim.toolbarAnasayfa.title = "Kişiler"
+        tasarim.anasayfaToolbarBaslik = "Kişiler"
         (activity as AppCompatActivity).setSupportActionBar(tasarim.toolbarAnasayfa)
 
-        tasarim.rv.layoutManager = LinearLayoutManager(requireContext())
 
         val kisilerListesi = ArrayList<Kisiler>()
         val k1 = Kisiler(1,"Ahmet","1111")
@@ -50,13 +51,9 @@ class AnasayfaFragment : Fragment(),SearchView.OnQueryTextListener {
         kisilerListesi.add(k9)
 
         val adapter = KisilerAdapter(requireContext(),kisilerListesi)
-        tasarim.rv.adapter = adapter
+        tasarim.kisilerAdapter = adapter
 
 
-
-        tasarim.fab.setOnClickListener {
-            Navigation.findNavController(it).navigate(R.id.kisiKayitGecis)
-        }
 
         requireActivity().addMenuProvider(object : MenuProvider{
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
@@ -77,6 +74,11 @@ class AnasayfaFragment : Fragment(),SearchView.OnQueryTextListener {
         return tasarim.root
     }
 
+    fun fabTikla(it:View){
+        Navigation.findNavController(it).navigate(R.id.kisiKayitGecis)
+
+    }
+
     override fun onQueryTextSubmit(query: String): Boolean {
         ara(query)
         return true
@@ -89,6 +91,11 @@ class AnasayfaFragment : Fragment(),SearchView.OnQueryTextListener {
 
     fun ara(aramaKelimesi:String){
         Log.e("Kişi Ara",aramaKelimesi)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.e("Kişi Anasayfa", "Dönüldü")
     }
 
 }
