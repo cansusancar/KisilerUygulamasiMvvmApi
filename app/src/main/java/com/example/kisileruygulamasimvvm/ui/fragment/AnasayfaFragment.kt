@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,9 +21,12 @@ import com.example.kisileruygulamasimvvm.R
 import com.example.kisileruygulamasimvvm.data.entity.Kisiler
 import com.example.kisileruygulamasimvvm.databinding.FragmentAnasayfaBinding
 import com.example.kisileruygulamasimvvm.ui.adapter.KisilerAdapter
+import com.example.kisileruygulamasimvvm.ui.viewmodel.AnasayfaViewModel
+import com.example.kisileruygulamasimvvm.util.gecisYap
 
 class AnasayfaFragment : Fragment(),SearchView.OnQueryTextListener {
     private lateinit var tasarim: FragmentAnasayfaBinding
+    private lateinit var viewModel: AnasayfaViewModel
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         tasarim = DataBindingUtil.inflate(inflater,R.layout.fragment_anasayfa,container,false)
         tasarim.anasayfaFragment = this
@@ -31,27 +35,12 @@ class AnasayfaFragment : Fragment(),SearchView.OnQueryTextListener {
         (activity as AppCompatActivity).setSupportActionBar(tasarim.toolbarAnasayfa)
 
 
-        val kisilerListesi = ArrayList<Kisiler>()
-        val k1 = Kisiler(1,"Ahmet","1111")
-        val k2 = Kisiler(2,"Helin","2222")
-        val k3 = Kisiler(3,"Orcan","444")
-        val k5 = Kisiler(4,"Döne","7777")
-        val k6 = Kisiler(4,"Büşra","6666")
-        val k7 = Kisiler(4,"Nazlıcan","0000")
-        val k8 = Kisiler(4,"Türkan","8598")
-        val k9 = Kisiler(4,"Can","85847")
+        viewModel.kisilerListesi.observe(viewLifecycleOwner){
 
-        kisilerListesi.add(k1)
-        kisilerListesi.add(k2)
-        kisilerListesi.add(k3)
-        kisilerListesi.add(k5)
-        kisilerListesi.add(k6)
-        kisilerListesi.add(k7)
-        kisilerListesi.add(k8)
-        kisilerListesi.add(k9)
+            val adapter = KisilerAdapter(requireContext(),it,viewModel)
+            tasarim.kisilerAdapter = adapter
+        }
 
-        val adapter = KisilerAdapter(requireContext(),kisilerListesi)
-        tasarim.kisilerAdapter = adapter
 
 
 
@@ -74,28 +63,30 @@ class AnasayfaFragment : Fragment(),SearchView.OnQueryTextListener {
         return tasarim.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val tempViewModel : AnasayfaViewModel by viewModels ()
+        viewModel = tempViewModel
+    }
+
     fun fabTikla(it:View){
-        Navigation.findNavController(it).navigate(R.id.kisiKayitGecis)
+        Navigation.gecisYap(R.id.kisiKayitGecis,it)
 
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {
-        ara(query)
+        viewModel.ara(query)
         return true
     }
 
     override fun onQueryTextChange(newText: String): Boolean {
-        ara(newText)
+        viewModel.ara(newText)
         return true
-    }
-
-    fun ara(aramaKelimesi:String){
-        Log.e("Kişi Ara",aramaKelimesi)
     }
 
     override fun onResume() {
         super.onResume()
-        Log.e("Kişi Anasayfa", "Dönüldü")
+        viewModel.kisileriYukle()
     }
 
 }

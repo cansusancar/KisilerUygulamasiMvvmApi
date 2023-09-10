@@ -11,9 +11,13 @@ import com.example.kisileruygulamasimvvm.R
 import com.example.kisileruygulamasimvvm.data.entity.Kisiler
 import com.example.kisileruygulamasimvvm.databinding.CardTasarimBinding
 import com.example.kisileruygulamasimvvm.ui.fragment.AnasayfaFragmentDirections
+import com.example.kisileruygulamasimvvm.ui.viewmodel.AnasayfaViewModel
+import com.example.kisileruygulamasimvvm.util.gecisYap
 import com.google.android.material.snackbar.Snackbar
 
-class KisilerAdapter(var mContext: Context, var kisilerListesi:List<Kisiler>)
+class KisilerAdapter(var mContext: Context,
+                     var kisilerListesi:List<Kisiler>,
+                      var viewModel: AnasayfaViewModel)
     : RecyclerView.Adapter<KisilerAdapter.CardTasarimTutucu>() {
 
     inner class CardTasarimTutucu(tasarim: CardTasarimBinding) : RecyclerView.ViewHolder(tasarim.root){
@@ -43,12 +47,12 @@ class KisilerAdapter(var mContext: Context, var kisilerListesi:List<Kisiler>)
 
         t.satirCard.setOnClickListener {
             val gecis = AnasayfaFragmentDirections.kisiDetayGecis(kisi = kisi)
-            Navigation.findNavController(it).navigate(gecis)
+            Navigation.gecisYap(it,gecis)
         }
         t.imageViewSil.setOnClickListener {
             Snackbar.make(it,"${kisi.kisiAd} silinsin mi?",Snackbar.LENGTH_LONG)
                 .setAction("EVET"){
-                   Log.e("Kişi Sil",kisi.kisiId.toString())
+                   viewModel.sil(kisi.kisiId)
                 }.show()
         }
 
