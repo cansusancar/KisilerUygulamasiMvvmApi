@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -37,6 +39,7 @@ android {
     }
 }
 apply plugin: "androidx.navigation.safeargs.kotlin"
+//apply plugin: "kotlin-kapt"
 dependencies {
 
     implementation 'androidx.core:core-ktx:1.8.0'
@@ -52,9 +55,21 @@ dependencies {
     //viewModel eklentisi
     implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
 
+    //Hilt
+    implementation ("com.google.dagger:hilt-android:2.48")
+    annotationProcessor ("com.google.dagger:hilt-android-compiler:2.48")
+
     //Retrofit
 
-    implementation 'com.squareup.retrofit2:retrofit2:2.1.0'
-    implementation 'com.google.code.gson:gson:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+
+// GSON
+
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+// coroutine
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 }

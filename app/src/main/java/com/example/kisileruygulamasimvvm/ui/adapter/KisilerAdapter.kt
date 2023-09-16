@@ -50,9 +50,9 @@ class KisilerAdapter(var mContext: Context,
             Navigation.gecisYap(it,gecis)
         }
         t.imageViewSil.setOnClickListener {
-            Snackbar.make(it,"${kisi.kisiAd} silinsin mi?",Snackbar.LENGTH_LONG)
+            Snackbar.make(it,"${kisi.kisi_ad} silinsin mi?",Snackbar.LENGTH_LONG)
                 .setAction("EVET"){
-                   viewModel.sil(kisi.kisiId)
+                   viewModel.sil(kisi.kisi_id)
                 }.show()
         }
 

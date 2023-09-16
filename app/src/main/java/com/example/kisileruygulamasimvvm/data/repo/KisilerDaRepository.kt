@@ -40,7 +40,7 @@ class KisilerDaRepository(var kdao:KisilerDao) {
     fun tumKisileriAl(){
         kdao.tumKisiler().enqueue(object : Callback<KisilerCevap>{
             override fun onResponse(call: Call<KisilerCevap>?, response: Response<KisilerCevap>) {
-                val liste = response.body().kisiler
+                val liste = response.body()!!.kisiler
                 kisilerListesi.value = liste
             }
 

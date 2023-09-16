@@ -23,7 +23,9 @@ import com.example.kisileruygulamasimvvm.databinding.FragmentAnasayfaBinding
 import com.example.kisileruygulamasimvvm.ui.adapter.KisilerAdapter
 import com.example.kisileruygulamasimvvm.ui.viewmodel.AnasayfaViewModel
 import com.example.kisileruygulamasimvvm.util.gecisYap
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AnasayfaFragment : Fragment(),SearchView.OnQueryTextListener {
     private lateinit var tasarim: FragmentAnasayfaBinding
     private lateinit var viewModel: AnasayfaViewModel
