@@ -3,8 +3,13 @@ package com.example.kisileruygulamasimvvm.data.repo
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.example.kisileruygulamasimvvm.data.entity.Kisiler
+import com.example.kisileruygulamasimvvm.data.entity.KisilerCevap
+import com.example.kisileruygulamasimvvm.retrofit.KisilerDao
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-class KisilerDaRepository {
+class KisilerDaRepository(var kdao:KisilerDao) {
     var kisilerListesi:MutableLiveData<List<Kisiler>>
 
     init {
@@ -33,25 +38,15 @@ class KisilerDaRepository {
     }
 
     fun tumKisileriAl(){
+        kdao.tumKisiler().enqueue(object : Callback<KisilerCevap>{
+            override fun onResponse(call: Call<KisilerCevap>?, response: Response<KisilerCevap>) {
+                val liste = response.body().kisiler
+                kisilerListesi.value = liste
+            }
 
-        val liste = ArrayList<Kisiler>()
-        val k1 = Kisiler(1,"Ahmet","1111")
-        val k2 = Kisiler(2,"Helin","2222")
-        val k3 = Kisiler(3,"Orcan","444")
-        val k5 = Kisiler(4,"Döne","7777")
-        val k6 = Kisiler(4,"Büşra","6666")
-        val k7 = Kisiler(4,"Nazlıcan","0000")
-        val k8 = Kisiler(4,"Türkan","8598")
-        val k9 = Kisiler(4,"Can","85847")
+            override fun onFailure(call: Call<KisilerCevap>?, t: Throwable?) {
+            }
 
-        liste.add(k1)
-        liste.add(k2)
-        liste.add(k3)
-        liste.add(k5)
-        liste.add(k6)
-        liste.add(k7)
-        liste.add(k8)
-        liste.add(k9)
-        kisilerListesi.value = liste
+        })
     }
 }
